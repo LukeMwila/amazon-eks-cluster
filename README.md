@@ -7,6 +7,35 @@ This repository contains source code to provision an EKS cluster in AWS using Te
 * [Terraform](https://www.terraform.io/)
 * [kubectl](https://kubernetes.io/docs/tasks/tools/)
 
+## Project Structure
+
+```
+├── README.md
+├── eks
+|  ├── cluster.tf
+|  ├── cluster_role.tf
+|  ├── cluster_sg.tf
+|  ├── node_group.tf
+|  ├── node_group_role.tf
+|  ├── node_sg.tf
+|  └── vars.tf
+├── main.tf
+├── provider.tf
+├── raw-manifests
+|  ├── aws-auth.yaml
+|  ├── pod.yaml
+|  └── service.yaml
+├── variables.tf
+└── vpc
+   ├── control_plane_sg.tf
+   ├── data_plane_sg.tf
+   ├── nat_gw.tf
+   ├── output.tf
+   ├── public_sg.tf
+   ├── vars.tf
+   └── vpc.tf
+```
+
 ## Remote Backend State Configuration
 To configure remote backend state for your infrastructure, create an S3 bucket and DynamoDB table before running *terraform init*. In the case that you want to use local state persistence, update the *provider.tf* accordingly and don't bother with creating an S3 bucket and DynamoDB table.
 
@@ -16,7 +45,7 @@ To configure remote backend state for your infrastructure, create an S3 bucket a
 ### Create DynamoDB table for State Locking
 ```aws dynamodb create-table --table-name <table-name> --attribute-definitions AttributeName=LockID,AttributeType=S --key-schema AttributeName=LockID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1```
 
-## Provision Infrasrtucture
+## Provision Infrastructure
 Review the *main.tf* to update the node size configurations (i.e. desired, maximum, and minimum). When you're ready, run the following commands:
 1. `terraform init` - Initialize the project, setup the state persistence (whether local or remote) and download the API plugins.
 2. `terraform plan` - Print the plan of the desired state without changing the state.
